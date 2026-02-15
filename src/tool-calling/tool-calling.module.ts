@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ToolCallingService } from './tool-calling.service';
 import { ToolCallingController } from './tool-calling.controller';
-import { OpenAIModule } from '../openAi/openai.module';
+import { OpenAIModule } from '../llm/openai.module';
 
 @Module({
   imports: [OpenAIModule],
