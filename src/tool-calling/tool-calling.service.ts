@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
-
+import { OpenAIService } from 'src/llm/openai.service';
 @Injectable()
 export class ToolCallingService {
-  constructor(private readonly openai: OpenAI) {}
+  constructor(
+    private readonly openai: OpenAI,
+    private readonly openAIService: OpenAIService,
+  ) {}
 
   async toolCalling(param: string): Promise<string> {
     // 1. Define a list of callable tools for the model
@@ -86,7 +89,7 @@ export class ToolCallingService {
     ];
 
     // 2. Prompt the model with tools defined
-    let response = await this.openai.responses.create({
+    let response = await this.openAIService.chatComplemetion({
       model: 'gpt-4o',
       tools,
       input,
@@ -131,10 +134,7 @@ export class ToolCallingService {
       });
     }
 
-    console.log('Final input:');
-    console.log(JSON.stringify(input, null, 2));
-
-    response = await this.openai.responses.create({
+    response = await this.openAIService.chatComplemetion({
       model: 'gpt-4o',
       instructions:
         'You must return the exact tool call output that you receive in the string format without any additional characters.',
@@ -143,8 +143,6 @@ export class ToolCallingService {
     });
 
     // 5. The model should be able to give a response!
-    console.log('Final output:');
-    console.log(JSON.stringify(response.output, null, 2));
     return JSON.stringify(response.output, null, 2);
   }
 }

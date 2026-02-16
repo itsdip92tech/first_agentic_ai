@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
 import { wrapOpenAI } from 'langsmith/wrappers';
+import { OpenAIService } from './openai.service';
 
 @Module({
   providers: [
@@ -13,7 +14,8 @@ import { wrapOpenAI } from 'langsmith/wrappers';
         ),
       inject: [ConfigService],
     },
+    OpenAIService,
   ],
-  exports: [OpenAI],
+  exports: [OpenAI, OpenAIService],
 })
 export class OpenAIModule {}
